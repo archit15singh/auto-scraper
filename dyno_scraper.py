@@ -79,6 +79,7 @@ def scrape_all_links(url, depth=0):
     while to_visit:
         print("*" * 100)
         print(f"{len(to_visit)} <- queue")
+        print(f"already visited: {len(visited)}")
         print("*" * 100)
         current_url, current_depth = to_visit.pop(0)
         if current_url not in visited:
