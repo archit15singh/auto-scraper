@@ -5,6 +5,7 @@ from urllib.parse import urljoin, urlparse
 import time
 import argparse
 from concurrent.futures import ThreadPoolExecutor
+import json
 
 parser = argparse.ArgumentParser(description="Web Scraper with Depth")
 parser.add_argument("--start_url", required=True, help="The starting URL for web scraping")
@@ -54,12 +55,15 @@ def scrape_links(url, depth):
     links.append(url)
 
     with ThreadPoolExecutor(max_workers=5) as executor:
+        link_futures = []
         for link in soup.find_all("a"):
             href = link.get("href")
             if href and is_valid_url(href):
                 absolute_url = urljoin(url, href)
                 if absolute_url.startswith("/") or (is_same_domain(absolute_url) and absolute_url.startswith("https://")):
-                    links.extend(executor.submit(scrape_links, absolute_url, depth + 1).result())
+                    link_futures.append(executor.submit(scrape_links, absolute_url, depth + 1))
+        for future in link_futures:
+            links.extend(future.result())
     
     return links
 
@@ -88,6 +92,11 @@ def scrape_all_links(url, depth=0):
     end_time = time.time()
     elapsed_time_minutes = (end_time - start_time) / 60
     print(f"Total time taken: {elapsed_time_minutes:.2f} minutes")
+
+    file_path = os.path.join(folder_path, "visited.json")
+    with open(file_path, "w", encoding="utf-8") as file:
+        visited_list = list(visited)
+        json.dump(visited_list, file, indent=2)
 
     return visited
 
