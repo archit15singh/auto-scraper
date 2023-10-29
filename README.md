@@ -27,7 +27,7 @@ pip install requests beautifulsoup4
 3. Use the following command to execute the script:
 
 ```bash
-python web_scraper.py --start_url <start_url> --domain <domain> --max_depth <max_depth>
+python dyno_scraper_optimised.py --start_url <start_url> --domain <domain> --max_depth <max_depth>
 ```
 
 Replace the placeholders with your desired values:
@@ -39,7 +39,7 @@ Replace the placeholders with your desired values:
 For example, to scrape pages starting from "https://example.com" with a maximum depth of 2 within the "example.com" domain, use:
 
 ```bash
-python web_scraper.py --start_url https://example.com --domain example.com --max_depth 2
+python dyno_scraper_optimised.py --start_url https://react.dev/learn --domain react.dev --max_depth 1
 ```
 
 ## Output
