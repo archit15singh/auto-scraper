@@ -3,7 +3,6 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 import time
-import uuid
 import argparse
 
 parser = argparse.ArgumentParser(description="Web Scraper with Depth")
@@ -29,11 +28,9 @@ if os.path.exists(folder_path):
 
 os.makedirs(folder_path)
 
-def generate_unique_id():
-    return str(uuid.uuid4())
-
-def write_html_to_txt(unique_id, data):
-    file_name = f"{unique_id}.txt"
+def write_html_to_txt(url, data):
+    url = url.replace(":", "_").replace("/", "_")
+    file_name = f"{url}.txt"
     file_path = os.path.join(folder_path, file_name)
     with open(file_path, "w", encoding="utf-8") as file:
         file.write(data)
@@ -52,9 +49,8 @@ def scrape_links(url, depth):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
     links = []
-    unique_id = generate_unique_id()
-    write_html_to_txt(unique_id, response.text)
-    links.append((unique_id, url))
+    write_html_to_txt(url, response.text)
+    links.append(url)
 
     for link in soup.find_all("a"):
         href = link.get("href")
@@ -83,7 +79,7 @@ def scrape_all_links(url, depth=0):
             visited.add(current_url)
             print(f"Visiting: {current_url}, Depth: {current_depth}")
             links = scrape_links(current_url, current_depth)
-            add_links = [(url, depth) for _, url in links if url not in visited]
+            add_links = [(url, depth) for url in links if url not in visited]
             print(f"adding {len(add_links)} to the queue")
             to_visit.extend(add_links)
 
