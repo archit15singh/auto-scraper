@@ -48,22 +48,26 @@ def scrape_links(url, depth):
     if depth > max_depth:
         return []
     print(f"Scraping links from: {url}, Depth: {depth}")
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, "html.parser")
-    links = []
-    write_html_to_txt(url, response.text)
-    links.append(url)
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an exception for non-2xx responses
+        soup = BeautifulSoup(response.content, "html.parser")
+        links = []
+        write_html_to_txt(url, response.text)
+        links.append(url)
 
-    with ThreadPoolExecutor(max_workers=5) as executor:
-        link_futures = []
-        for link in soup.find_all("a"):
-            href = link.get("href")
-            if href and is_valid_url(href):
-                absolute_url = urljoin(url, href)
-                if absolute_url.startswith("/") or (is_same_domain(absolute_url) and absolute_url.startswith("https://")):
-                    link_futures.append(executor.submit(scrape_links, absolute_url, depth + 1))
-        for future in link_futures:
-            links.extend(future.result())
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            link_futures = []
+            for link in soup.find_all("a"):
+                href = link.get("href")
+                if href and is_valid_url(href):
+                    absolute_url = urljoin(url, href)
+                    if absolute_url.startswith("/") or (is_same_domain(absolute_url) and absolute_url.startswith("https://")):
+                        link_futures.append(executor.submit(scrape_links, absolute_url, depth + 1))
+            for future in link_futures:
+                links.extend(future.result())
+    except Exception as e:
+        print(f"An error occurred while scraping {url}: {str(e)}")
     
     return links
 
