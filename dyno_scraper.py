@@ -31,7 +31,7 @@ os.makedirs(folder_path)
 
 def write_html_to_txt(url, data):
     url = url.replace(":", "_").replace("/", "_")
-    file_name = f"{url}.txt"
+    file_name = f"{url}.html"
     file_path = os.path.join(folder_path, file_name)
     with open(file_path, "w", encoding="utf-8") as file:
         file.write(data)
