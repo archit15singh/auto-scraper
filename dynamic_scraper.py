@@ -48,11 +48,11 @@ def scrape_links(url, depth):
     if depth > max_depth:
         return []
     print(f"Scraping links from: {url}, Depth: {depth}")
+    links = []
     try:
         response = requests.get(url)
         response.raise_for_status()  # Raise an exception for non-2xx responses
         soup = BeautifulSoup(response.content, "html.parser")
-        links = []
         write_html_to_txt(url, response.text)
         links.append(url)
 
