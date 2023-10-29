@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 import time
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 
 parser = argparse.ArgumentParser(description="Web Scraper with Depth")
 parser.add_argument("--start_url", required=True, help="The starting URL for web scraping")
@@ -52,12 +53,13 @@ def scrape_links(url, depth):
     write_html_to_txt(url, response.text)
     links.append(url)
 
-    for link in soup.find_all("a"):
-        href = link.get("href")
-        if href and is_valid_url(href):
-            absolute_url = urljoin(url, href)
-            if absolute_url.startswith("/") or (is_same_domain(absolute_url) and absolute_url.startswith("https://")):
-                links.extend(scrape_links(absolute_url, depth + 1))
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        for link in soup.find_all("a"):
+            href = link.get("href")
+            if href and is_valid_url(href):
+                absolute_url = urljoin(url, href)
+                if absolute_url.startswith("/") or (is_same_domain(absolute_url) and absolute_url.startswith("https://")):
+                    links.extend(executor.submit(scrape_links, absolute_url, depth + 1).result())
     
     return links
 
