@@ -5,3 +5,5 @@ python dynamic_scraper.py --start_url https://huyenchip.com/ --domain huyenchip 
 python dynamic_scraper.py --start_url https://cookbook.openai.com/ --domain cookbook.openai.com --max_depth 1
 python dynamic_scraper.py --start_url https://www.latent.space/archive --domain www.latent.space --max_depth 1
 python dynamic_scraper.py --start_url https://aman.ai/ --domain aman.ai --max_depth 1
+python dynamic_scraper.py --start_url https://www.lifehack.org --domain www.lifehack.org --max_depth 1
+python dynamic_scraper.py --start_url https://blog.langchain.dev/ --domain blog.langchain.dev --max_depth 1

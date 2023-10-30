@@ -17,7 +17,7 @@ start_url = args.start_url
 domain = args.domain
 max_depth = args.max_depth
 
-folder_path = domain
+folder_path = f"data/{domain}"
 if os.path.exists(folder_path):
     for root, dirs, files in os.walk(folder_path, topdown=False):
         for file in files:
@@ -34,8 +34,11 @@ def write_html_to_txt(url, data):
     url = url.replace(":", "_").replace("/", "_")
     file_name = f"{url}.html"
     file_path = os.path.join(folder_path, file_name)
-    with open(file_path, "w", encoding="utf-8") as file:
-        file.write(data)
+    if not os.path.exists(file_path):
+        with open(file_path, "w", encoding="utf-8") as file:
+            file.write(data)
+    else:
+        print(f"File {file_name} already exists. Skipping writing HTML to a text file.")
 
 def is_same_domain(url):
     parsed_url = urlparse(url)
