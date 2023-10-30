@@ -31,6 +31,7 @@ if os.path.exists(folder_path):
 os.makedirs(folder_path)
 
 def write_html_to_txt(url, data):
+    print(f"saving for {url}")
     url = url.replace(":", "_").replace("/", "_")
     file_name = f"{url}.html"
     file_path = os.path.join(folder_path, file_name)
@@ -38,7 +39,7 @@ def write_html_to_txt(url, data):
         with open(file_path, "w", encoding="utf-8") as file:
             file.write(data)
     else:
-        print(f"File {file_name} already exists. Skipping writing HTML to a text file.")
+        print(f"warning: already exists!")
 
 def is_same_domain(url):
     parsed_url = urlparse(url)
@@ -50,7 +51,7 @@ def is_valid_url(url):
 def scrape_links(url, depth):
     if depth > max_depth:
         return []
-    print(f"Scraping links from: {url}, Depth: {depth}")
+    # print(f"Scraping links from: {url}, Depth: {depth}")
     links = []
     try:
         response = requests.get(url)
