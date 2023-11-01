@@ -13,7 +13,7 @@ def timeit(func):
 
 @timeit
 def run():
-    html_path = '/Users/architsingh/Documents/projects/auto-scraper/data/react.dev/https___react.dev_learn_state-a-components-memory.html'
+    html_path = '/Users/architsingh/Documents/projects/auto-scraper/data/react.dev/https___react.dev_learn.txt'
     with open(html_path, 'r') as f:
         html_data = f.read()
     
