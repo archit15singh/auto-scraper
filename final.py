@@ -41,7 +41,8 @@ for scraped_link in all_scraped_links:
     docs = loader.load()
     print(len(docs[0].page_content))
 
-    llm = Ollama(model="llama2")
+    llm = Ollama(model="mistral-openorca")
     chain = load_summarize_chain(llm, chain_type="stuff")
-    result = chain.run(docs)
+    result = chain.run(docs, debug=True)
     print(f"len of result {len(result)}")
+    print(result)
