@@ -95,6 +95,7 @@ def scrape_all_links(url, depth=0):
             print(f"Visiting: {current_url}, Depth: {current_depth}")
             links = scrape_links(current_url, current_depth)
             add_links = [(url, depth) for url in links if url not in visited]
+            add_links = list(set(add_links))
             print(f"adding {len(add_links)} to the queue")
             to_visit.extend(add_links)
 
